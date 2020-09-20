@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 import environ
 
@@ -21,3 +23,11 @@ DATABASES = {
     # read os.environ['SQLITE_URL']
     'extra': env.db('SQLITE_URL', default='sqlite:////tmp/my-tmp-sqlite.db')
 }
+
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Default file storage mechanism that holds media.
+# DEFAULT_FILE_STORAGE = env('FILE_STORAGE')
