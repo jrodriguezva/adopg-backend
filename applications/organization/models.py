@@ -15,6 +15,7 @@ class Address(models.Model):
 
     class Meta:
         verbose_name = "dirección"
+        verbose_name_plural = "direcciones"
 
 
 class SocialMedia(models.Model):
@@ -26,6 +27,7 @@ class SocialMedia(models.Model):
 
     class Meta:
         verbose_name = "redes sociales"
+        verbose_name_plural = "redes sociales"
 
 
 class Hour(models.Model):
@@ -39,6 +41,7 @@ class Hour(models.Model):
 
     class Meta:
         verbose_name = "horario"
+        verbose_name_plural = "horarios"
 
 
 class Organization(TimeStampedModel):
@@ -47,10 +50,10 @@ class Organization(TimeStampedModel):
     phone = PhoneNumberField("teléfono")
     url = models.CharField('url', max_length=50)
     website = models.CharField('sitio web', max_length=50)
-    hours = models.OneToOneField(Hour, on_delete=models.CASCADE)
-    address = models.OneToOneField(Address, on_delete=models.CASCADE)
-    socialMedia = models.OneToOneField(SocialMedia, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="organization")
+    hours = models.OneToOneField(Hour, on_delete=models.CASCADE, verbose_name="horario")
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, verbose_name="dirección")
+    socialMedia = models.OneToOneField(SocialMedia, on_delete=models.CASCADE, verbose_name="redes sociales")
+    image = models.ImageField('imagen', upload_to="organization")
 
     class Meta:
         verbose_name = "organización"
