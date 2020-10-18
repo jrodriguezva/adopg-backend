@@ -32,18 +32,21 @@ jobs:
       - name: Setup python environment # setting python environment to 3.x
         uses: actions/setup-python@v2.1.3
         with:
-          python-version: '3.x' # if you want multiple python version run just use matrix strategy in job config. See the documentation of GitHub Actions
+          python-version: 3.8 # if you want multiple python version run just use matrix strategy in job config. See the documentation of GitHub Actions
       - name: Check Python version # checking the python version to see if 3.x is installed.
         run: python --version
       - name: Install requirements # install application requirements
         run: pip install -r requirements.txt
-      - name: Check Syntax # check code formatting
-        run: pycodestyle --statistics .
       - name: Install env file
         env:
           ENV_FILE_DEV: ${{ secrets.ENV_FILE_DEV }}
         run: 'echo "$ENV_FILE_DEV" > ./app/settings/.env'
-      - name: Run Migrations # run migrations to create table in side car db container
-        run: python manage.py migrate
-      - name: Run Test # running tests
-        run: python manage.py test
+      - name: Run unit tests
+        run: pytest
+      - name: Wemake Python Stylguide
+        uses: wemake-services/wemake-python-styleguide@0.14.1
+        continue-on-error: true
+        with:
+          reporter: 'github-pr-review'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
