@@ -52,7 +52,7 @@ class Organization(TimeStampedModel):
     website = models.CharField('sitio web', max_length=50)
     hours = models.OneToOneField(Hour, on_delete=models.CASCADE, verbose_name="horario")
     address = models.OneToOneField(Address, on_delete=models.CASCADE, verbose_name="dirección")
-    socialMedia = models.OneToOneField(SocialMedia, on_delete=models.CASCADE, verbose_name="redes sociales")
+    social_media = models.OneToOneField(SocialMedia, on_delete=models.CASCADE, verbose_name="redes sociales")
     image = models.ImageField('imagen', upload_to="organization")
 
     class Meta:
