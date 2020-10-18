@@ -6,13 +6,14 @@ on:
       - 'develop'
         
 jobs:
-  codecov:
-    name: Codecov Workflow
+  buildProject:
+    name: Compile and Test Workflow
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code # checking our the code at current commit that triggers the workflow
         uses: actions/checkout@v2.3.3
+        with:
+          fetch-depth: 0
       - name: Cache dependency # caching dependency will make our build faster.
         uses: actions/cache@v2.1.2 # for more info checkout pip section documentation at https://github.com/actions/cache
         with:
@@ -34,23 +35,14 @@ jobs:
         run: 'echo "$ENV_FILE_DEV" > ./app/settings/.env'
       - name: Generate coverage report
         run: pytest --cov=./ --cov-report=xml
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.13
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
           flags: unittests
-
-  sonarcloud:
-    name: SonarCloud
-    needs: [health-check-job]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.1.2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
