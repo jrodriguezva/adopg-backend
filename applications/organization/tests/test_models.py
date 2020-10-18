@@ -2,8 +2,9 @@ from django.test import TestCase
 from phonenumbers import PhoneNumber
 import pytest
 
-from applications.organization.models import *
+from applications.organization.models import Organization
 from model_bakery import baker
+
 
 @pytest.mark.django_db
 class OrganizationTestCase(TestCase):
